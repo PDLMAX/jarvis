@@ -1,0 +1,28 @@
+{
+  "llm": {
+    "provider": "deepseek",
+    "deepseek": {
+      "api_key": "",
+      "base_url": "https://api.deepseek.com/v1",
+      "model": "deepseek-chat"
+    },
+    "volcark": {
+      "api_key": "",
+      "base_url": "https://ark.cn-beijing.volces.com/api/v3",
+      "model": ""
+    }
+  },
+  "tts": {
+    "engine": "pyttsx3",
+    "volc": {
+      "app_id": "",
+      "access_key": "",
+      "resource_id": "seed-tts-2.0",
+      "speaker": "zh_male_m191_uranus_bigtts",
+      "endpoint": "https://openspeech.bytedance.com/api/v3/tts/unidirectional/sse"
+    }
+  },
+  "network": {
+    "use_proxy": false
+  }
+}

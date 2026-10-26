@@ -1,0 +1,26 @@
+# ===== 密钥与本地配置（绝对不要提交真实密钥）=====
+config.json
+
+# ===== Python =====
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# ===== 运行时数据 =====
+uploads/
+*.log
+
+# ===== 聊天历史（本地持久化，可能含隐私）=====
+chat_history.json
+
+# ===== 媒体文件（版权音乐 / 私人照片，不随代码开源）=====
+media/
+
+# ===== macOS 编译产物 =====
+desktop/JARVIS.app/
+desktop/build/
+
+# ===== 系统文件 =====
+.DS_Store

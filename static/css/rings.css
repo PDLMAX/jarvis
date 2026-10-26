@@ -1,0 +1,224 @@
+/* ════════════════════════════════════════════════════════════════════════
+    J.A.R.V.I.S. · ENHANCED RING SYSTEM v2.0
+    Multi-layer sci-fi orbital rings with particle trails, arc segments,
+    and state-reactive animations.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* ── Ring container ──────────────────────────────────────────── */
+.ring-system {
+  position: absolute;
+  inset: -60px;
+  width: 460px;
+  height: 460px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Base ring shared style ─────────────────────────────────── */
+.ring {
+  position: absolute;
+  top: 50%; left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ── Inner Ring: glowing arc segments + particle trail ──────── */
+.ring-inner {
+  width: 230px; height: 230px;
+  animation: spin-cw 8s linear infinite;
+  filter: drop-shadow(0 0 4px var(--cyan-soft));
+}
+.ring-inner .arc-seg {
+  position: absolute;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+.ring-inner .arc-seg:nth-child(1) {
+  border-top-color: var(--cyan);
+  border-right-color: rgba(0,240,255,0.5);
+  filter: drop-shadow(0 0 6px var(--cyan));
+}
+.ring-inner .arc-seg:nth-child(2) {
+  transform: rotate(120deg);
+  border-top-color: rgba(0,240,255,0.7);
+  border-left-color: rgba(0,240,255,0.3);
+  filter: drop-shadow(0 0 4px var(--cyan-soft));
+}
+.ring-inner .arc-seg:nth-child(3) {
+  transform: rotate(240deg);
+  border-bottom-color: var(--cyan-soft);
+  filter: drop-shadow(0 0 3px rgba(0,240,255,0.4));
+}
+
+/* particle dots on inner ring */
+.ring-inner .particle {
+  position: absolute;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan), 0 0 16px rgba(0,240,255,0.5);
+  animation: particle-pulse 1.6s ease-in-out infinite;
+}
+.ring-inner .particle:nth-child(4) { top: 0;    left: 50%; transform: translate(-50%, -50%); animation-delay: 0s; }
+.ring-inner .particle:nth-child(5) { top: 50%;  right: 0;   transform: translate(50%, -50%);   animation-delay: 0.53s; }
+.ring-inner .particle:nth-child(6) { bottom: 0; left: 50%;  transform: translate(-50%, 50%);   animation-delay: 1.06s; }
+
+/* ── Mid Ring: dashed tech scale ring ──────────────────────── */
+.ring-mid {
+  width: 310px; height: 310px;
+  border: 1.5px dashed rgba(0, 240, 255, 0.35);
+  animation: spin-ccw 14s linear infinite;
+  filter: drop-shadow(0 0 2px rgba(0,240,255,0.2));
+}
+.ring-mid::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 1px dotted rgba(0, 240, 255, 0.15);
+  background:
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(0,240,255,0.0) 0deg 8deg,
+      rgba(0,240,255,0.18) 8deg 9deg
+    );
+  mask: radial-gradient(circle, transparent 60px, #000 61px, #000 74px, transparent 75px);
+  -webkit-mask: radial-gradient(circle, transparent 60px, #000 61px, #000 74px, transparent 75px);
+}
+
+/* scale tick marks around mid ring */
+.ring-mid-ticks {
+  position: absolute;
+  width: 330px; height: 330px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin-cw 30s linear infinite;
+}
+.ring-mid-ticks .tick {
+  position: absolute;
+  width: 2px; height: 8px;
+  background: rgba(0, 240, 255, 0.5);
+  left: 50%; top: 0;
+  transform-origin: 50% 165px;
+}
+
+/* ── Outer Ring: hexagonal honeycomb + pulse nodes ──────────── */
+.ring-outer {
+  width: 420px; height: 420px;
+  animation: spin-cw 20s linear infinite;
+}
+.ring-outer-hex {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, transparent 185px, rgba(0,240,255,0.06) 186px, rgba(0,240,255,0.12) 187px, transparent 195px),
+    radial-gradient(circle, transparent 195px, rgba(0,240,255,0.04) 196px, transparent 210px);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  clip-path: polygon(
+    50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%
+  );
+}
+
+/* pulse nodes on outer ring */
+.ring-outer-node {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan), 0 0 12px rgba(0,240,255,0.4);
+  animation: node-pulse 3s ease-in-out infinite;
+}
+.ring-outer-node:nth-child(2) { top: 0;    left: 50%; transform: translate(-50%, -50%); animation-delay: 0s; }
+.ring-outer-node:nth-child(3) { top: 25%;  right: 7%;  transform: translate(50%, -50%);   animation-delay: 0.75s; }
+.ring-outer-node:nth-child(4) { bottom: 25%; right: 7%; transform: translate(50%, 50%);  animation-delay: 1.5s; }
+.ring-outer-node:nth-child(5) { bottom: 0;  left: 50%; transform: translate(-50%, 50%);  animation-delay: 2.25s; }
+
+/* ── Counter-orbit ellipse ring ─────────────────────────────── */
+.ring-ellipse {
+  width: 380px; height: 200px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 50%;
+  animation: spin-ccw 6s linear infinite;
+  box-shadow: 0 0 15px rgba(255,215,0,0.15), inset 0 0 15px rgba(255,215,0,0.08);
+}
+.ring-ellipse::after {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 10px var(--gold), 0 0 20px rgba(255,215,0,0.6);
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Second ellipse perpendicular */
+.ring-ellipse-b {
+  animation: spin-cw 9s linear infinite;
+  border-color: rgba(0,240,255,0.25);
+  box-shadow: 0 0 10px rgba(0,240,255,0.12), inset 0 0 10px rgba(0,240,255,0.06);
+}
+.ring-ellipse-b::after {
+  background: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan), 0 0 20px rgba(0,240,255,0.6);
+  top: auto; bottom: -4px;
+}
+
+/* ── State-reactive animations ──────────────────────────────── */
+
+/* LISTENING: gold pulse acceleration */
+.core.listening .ring-inner  { animation-duration: 4s; filter: drop-shadow(0 0 6px var(--gold-soft)); }
+.core.listening .ring-mid    { animation-duration: 7s; border-color: rgba(255,215,0,0.5); }
+.core.listening .ring-outer  { animation-duration: 10s; }
+.core.listening .ring-outer-hex { border-color: rgba(255,215,0,0.4); }
+.core.listening .ring-outer-node { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+.core.listening .ring-ellipse { border-color: rgba(255,215,0,0.6); box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+.core.listening .ring-ellipse::after { background: var(--gold); }
+
+/* SPEAKING: cyan explosive arcs */
+.core.speaking .ring-inner  { animation-duration: 2.5s; filter: drop-shadow(0 0 10px var(--cyan)); }
+.core.speaking .ring-mid    { animation-duration: 4s; border-color: rgba(0,240,255,0.6); }
+.core.speaking .ring-outer  { animation-duration: 5s; }
+.core.speaking .ring-outer-hex { border-color: rgba(0,240,255,0.5); }
+.core.speaking .ring-outer-node { background: var(--cyan); animation: node-pulse 1s ease-in-out infinite; }
+.core.speaking .ring-inner .particle { animation: particle-pulse 0.6s ease-in-out infinite; }
+
+/* THINKING: red alert jitter */
+.core.thinking .ring-inner  { animation-duration: 3s; filter: drop-shadow(0 0 6px rgba(255,59,59,0.5)); }
+.core.thinking .ring-mid    { animation-duration: 5s; border-color: rgba(255,59,59,0.4); }
+.core.thinking .ring-outer  { animation-duration: 7s; }
+.core.thinking .ring-outer-hex { border-color: rgba(255,59,59,0.35); }
+.core.thinking .ring-outer-node { background: var(--red-alert); box-shadow: 0 0 8px var(--red-alert); }
+.core.thinking .ring-ellipse { border-color: rgba(255,59,59,0.4); }
+.core.thinking .ring-ellipse::after { background: var(--red-alert); }
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+@keyframes spin-cw  { to { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes spin-ccw { to { transform: translate(-50%, -50%) rotate(-360deg); } }
+
+@keyframes particle-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.8) translate(var(--tx, -50%), var(--ty, -50%)); }
+  50%      { opacity: 1; transform: scale(1.4) translate(var(--tx, -50%), var(--ty, -50%)); }
+}
+
+@keyframes node-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50%      { transform: scale(1.8); opacity: 1; }
+}
+
+/* Hide old CSS rings (replaced by ring-system) */
+.core-ring { opacity: 0 !important; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ring-system { width: 340px; height: 340px; inset: -40px; }
+  .ring-inner  { width: 170px; height: 170px; }
+  .ring-mid    { width: 230px; height: 230px; }
+  .ring-mid-ticks { width: 245px; height: 245px; }
+  .ring-mid-ticks .tick { transform-origin: 50% 122.5px; }
+  .ring-outer  { width: 300px; height: 300px; }
+  .ring-ellipse { width: 270px; height: 140px; }
+}

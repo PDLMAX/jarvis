@@ -1,0 +1,277 @@
+/* ════════════════════════════════════════════════════════════════════════
+    J.A.R.V.I.S. · BOOT SCREEN v2.0
+    Sci-fi boot sequence with system check, progress bar, and logo reveal.
+   ════════════════════════════════════════════════════════════════════════ */
+
+#boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(ellipse at center, #0d1525 0%, #060a14 60%, #000 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  overflow: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+#boot-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Scanline overlay on boot */
+#boot-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 240, 255, 0.03) 50%,
+    transparent 51%,
+    transparent 100%
+  );
+  background-size: 100% 6px;
+  animation: boot-scan 4s linear infinite;
+}
+@keyframes boot-scan {
+  0%   { background-position: 0 -100vh; }
+  100% { background-position: 0  100vh; }
+}
+
+/* ── Background grid ────────────────────────────────────────── */
+.boot-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,240,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,240,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask: radial-gradient(circle at center, #000 0%, transparent 70%);
+  -webkit-mask: radial-gradient(circle at center, #000 0%, transparent 70%);
+}
+
+/* ── Rotating hex background decoration ─────────────────────── */
+.boot-hex-bg {
+  position: absolute;
+  width: 600px; height: 600px;
+  border: 1px solid rgba(0,240,255,0.08);
+  border-radius: 50%;
+  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
+  animation: spin-slow 40s linear infinite;
+}
+.boot-hex-bg:nth-child(2) {
+  width: 500px; height: 500px;
+  border-color: rgba(0,240,255,0.05);
+  animation: spin-slow 30s linear infinite reverse;
+}
+.boot-hex-bg:nth-child(3) {
+  width: 700px; height: 700px;
+  border-color: rgba(0,240,255,0.04);
+  animation: spin-slow 50s linear infinite;
+}
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+
+/* ── Central content container ──────────────────────────────── */
+.boot-content {
+  position: relative;
+  z-index: 2;
+  width: 520px;
+  max-width: 90vw;
+}
+
+/* ── Logo section ───────────────────────────────────────────── */
+.boot-logo {
+  text-align: center;
+  margin-bottom: 36px;
+  opacity: 0;
+  animation: boot-fade-rise 0.8s ease forwards 0.3s;
+}
+.boot-logo-glyph {
+  font-size: 52px;
+  color: var(--gold);
+  text-shadow: 0 0 20px var(--gold), 0 0 60px rgba(255,215,0,0.5);
+  display: block;
+  animation: boot-glyph-pulse 2s ease-in-out infinite;
+  line-height: 1;
+}
+@keyframes boot-glyph-pulse {
+  0%, 100% { transform: scale(1); text-shadow: 0 0 20px var(--gold), 0 0 60px rgba(255,215,0,0.4); }
+  50%      { transform: scale(1.08); text-shadow: 0 0 30px var(--gold), 0 0 80px rgba(255,215,0,0.7); }
+}
+.boot-logo-text {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 28px;
+  letter-spacing: 0.4em;
+  color: var(--cyan);
+  text-shadow: 0 0 12px var(--cyan), 0 0 30px var(--cyan-soft);
+  margin-top: 8px;
+  display: block;
+}
+.boot-logo-version {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  color: var(--cyan-soft);
+  margin-top: 6px;
+  display: block;
+}
+
+/* ── System check lines ─────────────────────────────────────── */
+.boot-checks {
+  margin: 0 0 28px 0;
+  min-height: 200px;
+}
+.boot-line {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--cyan-soft);
+  padding: 4px 0;
+  opacity: 0;
+  transform: translateX(-12px);
+  animation: boot-line-in 0.5s ease forwards;
+  white-space: nowrap;
+}
+.boot-line .prompt {
+  color: var(--gold);
+  margin-right: 6px;
+}
+.boot-line .status-ok {
+  color: #4ade80;
+  margin-left: 8px;
+}
+.boot-line .status-warn {
+  color: var(--gold);
+  margin-left: 8px;
+}
+.boot-line .status-load {
+  color: var(--cyan);
+  margin-left: 8px;
+}
+@keyframes boot-line-in {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Typing cursor */
+.boot-cursor {
+  display: inline-block;
+  width: 8px; height: 14px;
+  background: var(--cyan);
+  animation: boot-cursor-blink 0.6s step-end infinite;
+  vertical-align: middle;
+  margin-left: 2px;
+}
+@keyframes boot-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* ── Progress bar ───────────────────────────────────────────── */
+.boot-progress-wrap {
+  opacity: 0;
+  animation: boot-fade-rise 0.6s ease forwards;
+}
+.boot-progress-label {
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--cyan-soft);
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.boot-progress-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0,240,255,0.08);
+  border: 1px solid rgba(0,240,255,0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.boot-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), var(--cyan));
+  box-shadow: 0 0 12px var(--cyan), 0 0 24px rgba(0,240,255,0.4);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.boot-progress-fill.complete {
+  animation: boot-progress-glow 1s ease-in-out infinite;
+}
+@keyframes boot-progress-glow {
+  0%, 100% { box-shadow: 0 0 12px var(--cyan), 0 0 24px rgba(0,240,255,0.4); }
+  50%      { box-shadow: 0 0 20px var(--cyan), 0 0 40px rgba(0,240,255,0.7); }
+}
+
+/* ── Skip button ────────────────────────────────────────────── */
+.boot-skip {
+  position: absolute;
+  top: 24px;
+  right: 28px;
+  z-index: 10;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--cyan-soft);
+  background: rgba(0,240,255,0.06);
+  border: 1px solid rgba(0,240,255,0.2);
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.boot-skip:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(0,240,255,0.3);
+}
+
+/* ── Final entrance animation ───────────────────────────────── */
+.boot-entrance {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: var(--bg-deep);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.boot-entrance.active {
+  opacity: 1;
+}
+.boot-entrance-inner {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--cyan);
+  box-shadow: 0 0 40px var(--cyan), 0 0 80px rgba(0,240,255,0.5);
+  animation: boot-orb-appear 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes boot-orb-appear {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  60%  { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(50); opacity: 0; }
+}
+
+/* ── Shared animation ───────────────────────────────────────── */
+@keyframes boot-fade-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .boot-logo-glyph { font-size: 38px; }
+  .boot-logo-text { font-size: 20px; }
+  .boot-content { width: 90vw; }
+  .boot-line { font-size: 10px; }
+}

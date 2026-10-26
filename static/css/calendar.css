@@ -1,0 +1,177 @@
+/* ════════════════════════════════════════════════════════════════════════
+   J.A.R.V.I.S. · CALENDAR + WEATHER ORACLE
+   Month grid + live forecast (Open-Meteo, no key).
+   ════════════════════════════════════════════════════════════════════════ */
+
+.hud-calendar {
+  position: fixed;
+  z-index: 60;
+  top: 280px;
+  right: 18px;
+  width: 320px;
+}
+
+.cal-panel { width: 100%; }
+
+/* ── 月份切换头 ─────────────────────────────────────────────── */
+.cal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 4px 0 8px;
+}
+.cal-month {
+  font-family: var(--font-display);
+  font-size: 12px; font-weight: 700; letter-spacing: 0.14em;
+  color: var(--cyan); text-shadow: 0 0 8px var(--cyan-soft);
+}
+.cal-nav {
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  background: rgba(0,240,255,0.06);
+  border: 1px solid rgba(0,240,255,0.2);
+  color: var(--cyan-soft); cursor: pointer;
+  font-size: 10px; line-height: 1;
+  transition: 0.2s;
+}
+.cal-nav:hover { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,240,255,0.3); }
+
+/* ── 星期表头 ──────────────────────────────────────────────── */
+.cal-weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 2px; margin-bottom: 4px;
+}
+.cal-weekdays span {
+  font-family: var(--font-display); font-size: 8px; letter-spacing: 0.1em;
+  color: var(--cyan-soft); opacity: 0.6; text-align: center;
+}
+.cal-weekdays span.wk { color: var(--gold); }
+
+/* ── 日期网格 ──────────────────────────────────────────────── */
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.cal-day {
+  position: relative;
+  height: 30px;
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-size: 10px;
+  color: var(--cyan-soft);
+  background: rgba(0,240,255,0.03);
+  border: 1px solid transparent;
+  cursor: default;
+  transition: 0.15s;
+}
+.cal-day:hover { border-color: rgba(0,240,255,0.3); color: var(--cyan); }
+.cal-day.empty { background: transparent; cursor: default; }
+.cal-day.wk { color: var(--gold-soft); }
+.cal-day.today {
+  color: var(--gold);
+  background: rgba(255,215,0,0.1);
+  border-color: var(--gold);
+  box-shadow: 0 0 10px rgba(255,215,0,0.35);
+  font-weight: 700;
+}
+.cal-day.has-weather::after {
+  content: '';
+  position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 4px var(--cyan);
+}
+
+/* ── 天气区块 ──────────────────────────────────────────────── */
+.weather-block {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dotted rgba(0,240,255,0.2);
+}
+.weather-now {
+  display: flex; align-items: center; gap: 12px;
+}
+.w-temp {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 34px; letter-spacing: 0.02em;
+  color: var(--cyan); text-shadow: 0 0 14px var(--cyan-soft);
+  line-height: 1;
+}
+.w-info { display: flex; flex-direction: column; gap: 2px; }
+.w-cond {
+  font-family: var(--font-display); font-size: 11px; letter-spacing: 0.1em;
+  color: var(--gold); text-shadow: 0 0 6px var(--gold-soft);
+}
+.w-city { font-size: 10px; color: var(--cyan-soft); opacity: 0.75; }
+
+.weather-meta {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 4px; margin: 8px 0;
+}
+.w-meta-item {
+  padding: 5px 6px;
+  background: rgba(0,240,255,0.05);
+  border: 1px solid rgba(0,240,255,0.15);
+  text-align: center;
+}
+.w-meta-item .label { display: block; font-size: 7px; letter-spacing: 0.16em; color: var(--cyan-soft); opacity: 0.6; }
+.w-meta-item .value { display: block; font-family: var(--font-display); font-size: 11px; color: var(--white); margin-top: 2px; }
+
+.weather-days {
+  display: flex; gap: 4px; justify-content: space-between;
+}
+.w-day {
+  flex: 1;
+  padding: 6px 2px;
+  background: rgba(0,240,255,0.04);
+  border: 1px solid rgba(0,240,255,0.14);
+  text-align: center;
+  transition: 0.15s;
+}
+.w-day:hover { border-color: rgba(0,240,255,0.4); }
+.w-day .dname { display: block; font-family: var(--font-display); font-size: 8px; color: var(--cyan-soft); letter-spacing: 0.08em; }
+.w-day .dicon { display: block; font-size: 16px; margin: 3px 0; }
+.w-day .dtemp { display: block; font-family: var(--font-display); font-size: 9px; color: var(--white); }
+.w-day .dtemp .min { opacity: 0.5; }
+
+.w-refresh {
+  display: block; width: 100%; margin-top: 8px;
+  font-family: var(--font-display); font-size: 8px; letter-spacing: 0.16em;
+  padding: 5px; cursor: pointer;
+  background: rgba(0,240,255,0.05);
+  border: 1px solid rgba(0,240,255,0.18);
+  color: var(--cyan-soft);
+  transition: 0.2s;
+}
+.w-refresh:hover { color: var(--cyan); border-color: var(--cyan); }
+
+.w-err { font-size: 10px; color: var(--red-alert); text-align: center; padding: 4px; }
+
+/* ── 响应式 ────────────────────────────────────────────────── */
+@media (max-height: 950px) {
+  .hud-calendar { top: 230px; }
+  .cal-day { height: 26px; }
+}
+@media (max-width: 768px) {
+  .hud-calendar { top: auto; bottom: 44px; right: 8px; left: 8px; width: auto; }
+}
+
+/* ── 天气城市切换 ── */
+.weather-loc { display: flex; gap: 4px; margin: 8px 0 6px; }
+.w-city-select, .w-city-input {
+  flex: 1 1 auto; min-width: 0;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(0,240,255,0.3);
+  color: #cfeaff;
+  font: 500 12px/1.6 'Rajdhani', sans-serif;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+.w-city-input::placeholder { color: rgba(207,234,255,0.4); }
+.w-geo {
+  flex: 0 0 auto;
+  background: rgba(0,240,255,0.08);
+  border: 1px solid rgba(0,240,255,0.3);
+  color: #00f0ff;
+  border-radius: 4px;
+  padding: 4px 6px;
+  cursor: pointer;
+}
+.w-geo:hover { background: rgba(0,240,255,0.2); }

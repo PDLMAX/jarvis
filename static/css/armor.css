@@ -1,0 +1,250 @@
+/* ════════════════════════════════════════════════════════════════════════
+    J.A.R.V.I.S. · 钢铁侠战甲全屏 HUD ARMOR SUIT
+   ════════════════════════════════════════════════════════════════════════ */
+
+.armor-overlay {
+  position: fixed; inset: 0; z-index: 150;
+  background: radial-gradient(ellipse at 50% 45%, rgba(16, 28, 48, 0.95) 0%, rgba(5, 8, 15, 0.99) 75%);
+  display: flex;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+  color: var(--cyan);
+}
+.armor-overlay.closed { display: none !important; }
+
+/* 网格背景 */
+.armor-grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: armorGrid 8s linear infinite;
+  pointer-events: none;
+}
+@keyframes armorGrid {
+  from { transform: perspective(600px) rotateX(55deg) translateY(0); }
+  to   { transform: perspective(600px) rotateX(55deg) translateY(48px); }
+}
+
+/* 扫描线 */
+.armor-scanline {
+  position: absolute; left: 0; right: 0; height: 120px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 240, 255, 0.08), transparent);
+  animation: armorScan 3.2s linear infinite;
+  pointer-events: none;
+}
+@keyframes armorScan {
+  0%   { top: -120px; }
+  100% { top: 100%; }
+}
+
+/* ── 中央电弧反应堆 ─────────────────────────────────────────── */
+.armor-center {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 20px;
+}
+.armor-reactor {
+  position: relative;
+  width: 220px; height: 220px;
+  display: grid; place-items: center;
+}
+.arc-core {
+  position: absolute;
+  width: 70px; height: 70px; border-radius: 50%;
+  background: radial-gradient(circle, #ffffff 0%, var(--accent, var(--cyan)) 35%, rgba(0,240,255,0.4) 65%, transparent 75%);
+  box-shadow: 0 0 40px var(--accent, var(--cyan)), 0 0 80px rgba(0, 240, 255, 0.6);
+  animation: arcPulse 1.6s ease-in-out infinite;
+}
+@keyframes arcPulse {
+  0%, 100% { box-shadow: 0 0 30px var(--accent, var(--cyan)), 0 0 60px rgba(0,240,255,0.5); transform: scale(1); }
+  50%      { box-shadow: 0 0 60px var(--accent, var(--cyan)), 0 0 110px rgba(0,240,255,0.8); transform: scale(1.08); }
+}
+.arc-ring {
+  position: absolute; border-radius: 50%;
+  border: 2px solid transparent;
+}
+.arc-ring-1 {
+  width: 120px; height: 120px;
+  border-top-color: var(--accent, var(--cyan)); border-right-color: rgba(0,240,255,0.3);
+  animation: spin 3s linear infinite;
+}
+.arc-ring-2 {
+  width: 170px; height: 170px;
+  border-bottom-color: var(--gold); border-left-color: rgba(255,215,0,0.3);
+  animation: spin 5s linear infinite reverse;
+}
+.arc-ring-3 {
+  width: 220px; height: 220px;
+  border-top-color: rgba(0,240,255,0.5); border-bottom-color: rgba(0,240,255,0.2);
+  animation: spin 8s linear infinite;
+}
+.arc-coil {
+  position: absolute;
+  width: 96px; height: 96px; border-radius: 50%;
+  border: 1px dashed rgba(0, 240, 255, 0.5);
+  animation: spin 12s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.armor-title {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 30px; letter-spacing: 0.4em;
+  color: var(--accent, var(--cyan));
+  text-shadow: 0 0 16px var(--accent, var(--cyan)), 0 0 40px var(--cyan-soft);
+  text-align: center;
+  white-space: nowrap;
+}
+.armor-subtitle {
+  font-family: var(--font-display); font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-soft);
+  text-align: center;
+  min-height: 16px;
+  white-space: nowrap;
+}
+
+/* ── 机甲图库切换器 ─────────────────────────────────────────── */
+.armor-gallery {
+  position: relative; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  margin-top: 2px;
+}
+.armor-gallery-label {
+  font-family: var(--font-display); font-size: 9px;
+  letter-spacing: 0.3em; color: var(--cyan-soft);
+  text-shadow: 0 0 4px var(--cyan-soft);
+}
+.armor-gallery-list {
+  display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+  max-width: 560px;
+}
+.armor-chip {
+  font-family: var(--font-display); font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--cyan-soft);
+  background: rgba(10, 15, 26, 0.5);
+  border: 1px solid rgba(0, 240, 255, 0.22);
+  padding: 6px 14px;
+  cursor: pointer;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: 0.18s;
+  user-select: none;
+}
+.armor-chip:hover {
+  color: var(--cyan); border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+}
+.armor-chip.active {
+  color: #041018; background: var(--accent, var(--cyan));
+  border-color: var(--accent, var(--cyan));
+  text-shadow: none;
+  box-shadow: 0 0 16px var(--accent, var(--cyan));
+}
+
+/* ── 四角仪表 ───────────────────────────────────────────────── */
+.armor-hud {
+  position: absolute; z-index: 2;
+  width: 220px;
+  font-family: var(--font-display); font-size: 9px;
+  letter-spacing: 0.14em;
+  padding: 14px 18px;
+  background: rgba(10, 15, 26, 0.55);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  backdrop-filter: blur(4px);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.armor-hud-tl { top: 70px; left: 28px; }
+.armor-hud-tr { top: 70px; right: 28px; }
+.armor-hud-bl { bottom: 84px; left: 28px; }
+.armor-hud-br { bottom: 84px; right: 28px; }
+
+.armor-hud-label {
+  color: var(--cyan-soft);
+  margin: 8px 0 4px;
+  text-shadow: 0 0 4px var(--cyan-soft);
+  white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.armor-hud-label:first-child { margin-top: 0; }
+
+.armor-bar {
+  height: 6px;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 2px; overflow: hidden;
+  margin-bottom: 8px;
+}
+.armor-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent, #00f0ff), #0088ff);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+  transition: width 0.4s;
+}
+
+.armor-readout {
+  font-size: 15px; font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-soft);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+  white-space: nowrap;
+}
+
+/* 底部滚动字幕 */
+.armor-ticker {
+  position: absolute; bottom: 22px; left: 50%;
+  transform: translateX(-50%);
+  width: min(720px, 88vw);
+  height: 30px;
+  font-family: var(--font-display); font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--cyan);
+  text-shadow: 0 0 6px var(--cyan-soft);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  padding: 0;
+  background: rgba(13, 21, 37, 0.5);
+  overflow: hidden;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.armor-ticker-track {
+  display: inline-block;
+  white-space: nowrap;
+  line-height: 28px;
+  padding-left: 100%;
+  animation: armorTicker 20s linear infinite;
+  will-change: transform;
+}
+@keyframes armorTicker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+/* 关闭按钮 */
+.armor-close {
+  position: absolute; top: 22px; right: 26px; z-index: 5;
+  width: 40px; height: 40px;
+  background: rgba(255, 59, 59, 0.15);
+  border: 1px solid rgba(255, 59, 59, 0.5);
+  color: #ff6b6b;
+  font-size: 22px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+.armor-close:hover { background: rgba(255, 59, 59, 0.4); transform: scale(1.1); }
+
+@media (max-width: 768px) {
+  .armor-reactor { width: 150px; height: 150px; }
+  .arc-core { width: 50px; height: 50px; }
+  .arc-ring-1 { width: 82px; height: 82px; }
+  .arc-ring-2 { width: 116px; height: 116px; }
+  .arc-ring-3 { width: 150px; height: 150px; }
+  .armor-title { font-size: 20px; }
+  .armor-hud { width: 150px; padding: 10px 12px; }
+  .armor-hud-tl { top: 60px; left: 12px; }
+  .armor-hud-tr { top: 60px; right: 12px; }
+  .armor-hud-bl { bottom: 74px; left: 12px; }
+  .armor-hud-br { bottom: 74px; right: 12px; }
+}

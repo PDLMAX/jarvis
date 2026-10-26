@@ -1,0 +1,8 @@
+flask==3.0.3
+flask-socketio==5.3.6
+eventlet==0.36.1
+pyttsx3==2.90
+edge-tts==7.0.0
+pygame==2.5.2
+psutil==5.9.8
+openai==1.47.0

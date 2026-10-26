@@ -1,0 +1,121 @@
+/* ══════════════════════════════════════════════════════════════
+   J.A.R.V.I.S. · SETTINGS 面板（集中管理 API Key）
+   ══════════════════════════════════════════════════════════════ */
+
+.hud-settings {
+  position: fixed;
+  z-index: 60;
+  top: 230px;
+  right: 18px;
+  width: 320px;
+  max-height: calc(100vh - 160px);
+  overflow-y: auto;
+}
+
+.settings-panel { padding-bottom: 12px; }
+
+.settings-summary {
+  display: flex;
+  gap: 6px;
+  margin: 4px 0 8px;
+  flex-wrap: wrap;
+}
+.settings-chip {
+  font-family: var(--font-display);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  padding: 3px 7px;
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  color: var(--cyan-soft);
+  border-radius: 2px;
+}
+.settings-chip.ok {
+  border-color: rgba(0, 255, 150, 0.4);
+  color: #00ff96;
+  text-shadow: 0 0 5px rgba(0, 255, 150, 0.5);
+}
+
+.settings-section { margin: 8px 0 4px; }
+.settings-section-title {
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-shadow: 0 0 4px var(--gold-soft);
+  margin-bottom: 5px;
+  padding-bottom: 2px;
+  border-bottom: 1px dotted rgba(255, 215, 0, 0.2);
+}
+
+.settings-field { display: block; margin: 5px 0; }
+.settings-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--cyan-soft);
+  margin-bottom: 2px;
+}
+.settings-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(0, 10, 20, 0.6);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  color: var(--cyan);
+  font-family: var(--font-body);
+  font-size: 11px;
+  padding: 4px 7px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.settings-input:focus { border-color: var(--cyan); }
+.settings-input::placeholder { color: rgba(0, 240, 255, 0.25); }
+select.settings-input { cursor: pointer; }
+
+.settings-badge {
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  padding: 1px 5px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 90, 90, 0.4);
+  color: #ff7b7b;
+}
+.settings-badge.ok {
+  border-color: rgba(0, 255, 150, 0.4);
+  color: #00ff96;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dotted rgba(0, 240, 255, 0.2);
+}
+.settings-status {
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: var(--cyan-soft);
+}
+.settings-status.err { color: #ff7b7b; }
+.settings-save-btn {
+  font-family: var(--font-display);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: var(--bg-deep);
+  background: var(--cyan);
+  border: none;
+  padding: 5px 12px;
+  cursor: pointer;
+  clip-path: polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px);
+  transition: 0.2s;
+}
+.settings-save-btn:hover { background: #5ff7ff; box-shadow: 0 0 12px var(--cyan); }
+.settings-save-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+@media (max-width: 768px) {
+  .hud-settings { right: 8px; width: 280px; top: 80px; }
+}
