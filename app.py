@@ -1078,6 +1078,8 @@ def api_read():
 
 
 # ── 本地相册（media/photos）─────────────────────────────────────
+# 首次运行自动创建 media/ 与 media/photos/ 空目录，用户自行放入音乐/照片即可
+MEDIA_DIR.mkdir(exist_ok=True)
 PHOTOS_DIR = MEDIA_DIR / "photos"
 PHOTOS_DIR.mkdir(exist_ok=True)
 PHOTO_EXTS = {".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".heic", ".tiff"}
